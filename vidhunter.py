@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/local/bin/python
 
 import os
 import subprocess
@@ -30,6 +30,9 @@ print "start path is " + start_path
 arch_files = []
 
 for root, dirs, files in os.walk(start_path):
+	if len(files) == 0: # if the script was triggered on a directory with no files, don't bother
+		print "No files, exiting script"
+		sys.exit()
 	for name in files:
 		for extension in archive_extensions:
 			if name.lower().endswith(extension):
