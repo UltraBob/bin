@@ -28,12 +28,11 @@ else:
 print "start path is " + start_path
 
 arch_files = []
+filecount = 0
 
 for root, dirs, files in os.walk(start_path):
-	if len(files) == 0: # if the script was triggered on a directory with no files, don't bother
-		print "No files, exiting script"
-		sys.exit()
 	for name in files:
+                filecount+=1
 		for extension in archive_extensions:
 			if name.lower().endswith(extension):
 				arch_files.append(os.path.join(root, name))
@@ -41,7 +40,11 @@ if len(arch_files) > 0:
 	print ("files to unzip: ", arch_files)
 	for file in arch_files:
 		Archive(file).extractall(os.path.dirname(file))
-	
+
+if filecount == 0:
+    # if the script was triggered on a directory with no files, don't bother
+    print "No files, exiting script"
+    sys.exit()
 vidwalk=[]
 rmwalk=[]
 
