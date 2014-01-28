@@ -43,17 +43,17 @@ print '<?xml version="1.0" encoding="utf-8"?>'
 print '<rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" version="2.0">'
 print ' <channel>'
 print '     <description>tvcast</description>'
-print '     <link>' + link + '</link>'
+print '     <link>{}</link>'.format(link)
 print '        <title>TVCast</title>'
-print '     <pubDate>' + time.strftime("%a, %d %b %Y %H:%M:%S +0900") + '</pubDate>'
+print '     <pubDate>{}</pubDate>'.format(time.strftime("%a, %d %b %Y %H:%M:%S +0900"))
 
 for file in sorted_files:
     print "         <item>"
-    print "             <title>" + file.file + "</title>"
-    print '             <enclosure type="' + file.mime + '" length="' + file.size + '" url="' + file.url + '" />'
-    print "             <pubDate>" + file.pubdate + "</pubDate>"
-#    print "             <description>Mtime: " + file.mtime + " size: " + file.size + " pubdate: " + file.pubdate + '</description>'
-    print "             <guid>" + file.mtime + file.size + "</guid>"
+    print "             <title>{}</title>".format(file.file)
+    print '             <enclosure type="{}" length="{}" url="{}" />'.format(file.mime, file.size, file.url)
+    print "             <pubDate>{}</pubDate>".format(file.pubdate)
+#    print "             <description>Mtime: {}, size: {}, pubdate: {}</description>".format(file.mtime, file.size, file.pubdate)
+    print "             <guid>{}{}</guid>".format(file.mtime, file.size)
     print "         </item>"
         
 print " </channel>\n</rss>"
