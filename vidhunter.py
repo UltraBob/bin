@@ -7,13 +7,8 @@ import smtplib
 from pyunpack import Archive
 from email.mime.text import MIMEText
 
-try:
-    from vidhunter_config import *
-except ImportError:
-    pass
-
 """ TODO:
-add some configuration for the mail server
+
 """
 if len(sys.argv) > 1: # if a path is provided as an argument, use the directory path as the starting point
 	if os.path.exists(sys.argv[1]):
@@ -26,13 +21,14 @@ if len(sys.argv) > 1: # if a path is provided as an argument, use the directory 
 else:
 	start_path = os.getcwd()
 print "start path is " + start_path
-
+try:
+    from vidhunter_config import *
+except ImportError:
+    pass
 arch_files = []
-filecount = 0
 
 for root, dirs, files in os.walk(start_path):
 	for name in files:
-                filecount+=1
 		for extension in archive_extensions:
 			if name.lower().endswith(extension):
 				arch_files.append(os.path.join(root, name))
@@ -40,11 +36,7 @@ if len(arch_files) > 0:
 	print ("files to unzip: ", arch_files)
 	for file in arch_files:
 		Archive(file).extractall(os.path.dirname(file))
-
-if filecount == 0:
-    # if the script was triggered on a directory with no files, don't bother
-    print "No files, exiting script"
-    sys.exit()
+	
 vidwalk=[]
 rmwalk=[]
 
@@ -53,6 +45,10 @@ for (root, dirs, files) in os.walk(start_path, topdown=False): # create a snapsh
 
 for (root, dirs, files) in os.walk(start_path): # create a snapshot of currently folder and file situation to work with to avoid deleting late additions
     vidwalk.append((root,dirs,files))
+
+if len(vidwalk) == 1 and (len(vidwalk[0][2]) == 0 or (len(vidwalk[0][2]) == 1 and vidwalk[0][2][0] == ".DS_Store")): # if there are no files and/or subdirectories
+    print "No files found, exiting"
+    exit()
 
 vidfiles = []
 for root, dirs, files in vidwalk:
@@ -64,10 +60,9 @@ for root, dirs, files in vidwalk:
 if len(vidfiles) == 0: #if no video files were found send an e-mail
 	mailmessage = "These are the files that are included:\r\n\r\n"
 	for root, dirs, files in vidwalk:
-		for name in files:
-			mailmessage += str(os.path.join(root, name))
-	mailmessage += "\r\n\r\nthese remain in place until next time the script runs and finds a video.\r\n\r\nPlease scan these files, and see if perhaps your configuration is missing an extension that is a compressed file or a video file."
-	print mailmessage
+		mailmessage += "\r\nIn" + str(root) + "/" + str(dirs) + ": " + str(files) + "\r\n"
+	mailmessage += "\r\n\r\nthese remain in place until next time the script runs and finds a video."
+	print (mailmessage)
 	msg = MIMEText(mailmessage)
 	msg['Subject'] = "The vidhunter script failed because it didn't find any videos"
 	msg['From'] = email_address

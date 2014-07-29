@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>girl timer</title>
+	<meta name="generator" content="BBEdit 10.5" />
+	<style>
+	body {background-color: purple;}
+	</style>
+	<script>
+	var x;
+
+     function changecolors() {
+         x = Math.floor(Math.random() * 2) + 1
+         change();
+         setInterval(change, 360000);
+     }
+
+     function change() {
+         if(x == 1) {
+             color = "pink";
+             x = 2;
+         } else {
+             color = "purple";
+             x = 1;
+         }
+
+         document.body.style.background = color;
+     }
+     
+     function changeInterval(interval) {
+     	clearInterval();
+     	change();
+     	setInterval(change, document.getElementById('interval').value);
+     }
+	</script>
+</head>
+<body onload="changecolors();">
+<form id="setTime" style="background-color: yellow; color: black;"><input id="interval"></input><a href="#" stylestonclick="changeInterval();">Update time</a></form>
+</body>
+</html>
