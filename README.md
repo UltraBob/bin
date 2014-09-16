@@ -3,8 +3,10 @@ bin
 
 test scripts and scripts that I use for automating my system
 
-Useful Scripts
+Useful Scripts and Stuff
 ====
+
+*girl timer.html* This is a timer to help our twin pre-literate daughters to take turns.  One of them loves the color pink, and the other purple, so I fire up this page in the browser, and it randomly selects a color to start with.  It then switches colors every 3 minutes by default to let the girls know who's turn it is.  There is a field on the page to allow one to change the number of minutes to go between switches.  You can very easily break this script, there is no validation as it is for personal use and there is nothing to protect.
 
 *tvcast.py* reads the files in a directory, finds the files that have a mimetype, sorts them in descending order by mtime and spits out an rss feed with enclosures.
 
