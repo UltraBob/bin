@@ -1,41 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8" />
 	<title>girl timer</title>
-	<meta name="generator" content="BBEdit 10.5" />
-	<style>
-	body {background-color: purple;}
-	</style>
-	<script>
-	var x;
 
-     function changecolors() {
-         x = Math.floor(Math.random() * 2) + 1
+    <script type="text/javascript">
+	var x;
+    var intervalId=0;
+    var defaultInterval = 3;
+    var debugOn=0;
+
+    function debug(message) {
+        if (debugOn == 1) {
+            console.log(message);
+        }
+    }
+
+     function initcolors() {
+         x = Math.floor(Math.random() * 2) + 1;
          change();
-         setInterval(change, 360000);
+         document.getElementById('interval').value = defaultInterval;
+         intervalId = setInterval(change, minutesToMilliseconds(defaultInterval));
+         debug("intervalID: " + intervalId);
+     }
+
+     function minutesToMilliseconds(minutes) {
+        debug((minutes * 60000) + " milliseconds");
+        return minutes * 60000;
      }
 
      function change() {
+        debug("running change()");
          if(x == 1) {
              color = "pink";
+             debug("switched to pink");
              x = 2;
          } else {
              color = "purple";
+             debug("Switched to purple");
              x = 1;
          }
 
          document.body.style.background = color;
      }
-     
-     function changeInterval(interval) {
-     	clearInterval();
-     	change();
-     	setInterval(change, document.getElementById('interval').value);
+
+     function changeInterval() {
+        debug("running changeInterval: " + intervalId);
+     	clearInterval(intervalId);
+     	intervalId = setInterval(change, minutesToMilliseconds(document.getElementById('interval').value));
      }
 	</script>
 </head>
-<body onload="changecolors();">
-<form id="setTime" style="background-color: yellow; color: black;"><input id="interval"></input><a href="#" stylestonclick="changeInterval();">Update time</a></form>
+<body onload="initcolors();">
+<form id="setTime" style="background-color: yellow; color: black;">
+<input id="interval"></input> minutes
+<input name="Submit"  type="submit" value="Update time" onClick="JavaScript:changeInterval()"/></form>
 </body>
 </html>
